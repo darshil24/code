@@ -1,71 +1,60 @@
-/*
- * Copyright (c) 1995, 2008, Oracle and/or its affiliates. All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- *   - Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
- *
- *   - Redistributions in binary form must reproduce the above copyright
- *     notice, this list of conditions and the following disclaimer in the
- *     documentation and/or other materials provided with the distribution.
- *
- *   - Neither the name of Oracle or the names of its
- *     contributors may be used to endorse or promote products derived
- *     from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
- * IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
- * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
 
+package code;
 
+import javafx.scene.image.*;
+
+import java.applet.Applet;
 import java.awt.*;
+import java.awt.Image;
 import java.awt.event.*;
 import java.awt.image.*;
 import java.io.*;
 import java.nio.Buffer;
 import javax.imageio.*;
 import javax.swing.*;
+import java.lang.Math;
+
 import javax.swing.plaf.nimbus.State;
 
 /**
  * This class demonstrates how to load an Image from an external file
  */
-public class LoadImageApp extends Component {
+public class LoadImageApp extends Component implements MouseListener,MouseWheelListener {
     private static final int WINDOW_HEIGHT = 768;
     private static final int WINDOW_WIDTH = 1366;
-
+ protected Graphics2D g2d;
     private static final String title ="Tiger Zone 0.0.1";
     private static BufferedImage ICON;
     protected static final String[] s =new String[24];
     public static Image icon;
-    BufferedImage possible_move,img2;
+    public static BufferedImage possible_move,img2;
     public static BufferedImage [] tiles = new  BufferedImage[24];
 
+    public void  init(){
+
+        System.out.println("mouseListener");
+    }
     public void paint(Graphics g) {
+
+
 //        g.drawImage(img, 0, 0, null);
-//        g.drawImage(img2,920,920,null);
-        g.drawImage(tiles[0],0,0,null);
-        g.drawImage(tiles[1],105,0,null);
-        g.drawImage(tiles[2],205,105,null);
-        g.drawImage(possible_move,305,105,null);
-        g.drawImage(possible_move,205,205,null);
+        //g2d.drawImage(tiles[0],null,0,0);
+        g.drawImage(img2,0,0,null);
+        g.drawImage(tiles[(int)(Math.random()*24)],0,0,null);
+//        g.drawImage(tiles[1],105,0,null);
+//        g.drawImage(tiles[2],75,105,null);
+//
+//        g.drawImage(possible_move,305,105,null);
+//        g.drawImage(possible_move,205,205,null);
     }
 
     public LoadImageApp() {
+        addMouseListener(this);
+        addMouseWheelListener(this);
         initialize_jpgs();
         loadImages();
+
+
 
 
     }
@@ -74,7 +63,7 @@ public class LoadImageApp extends Component {
         try {
             ICON=ImageIO.read(new File("C:\\Users\\Darshil\\IdeaProjects\\java\\src\\code\\icon.png"));
             possible_move = ImageIO.read(new File("C:\\Users\\Darshil\\IdeaProjects\\java\\src\\code\\possible_move.jpg"));
-            img2 = ImageIO.read(new File("C:\\Users\\Darshil\\IdeaProjects\\java\\src\\code\\strawberry.jpg"));
+            img2 = ImageIO.read(new File("C:\\Users\\Darshil\\IdeaProjects\\java\\src\\code\\woo2.jpg"));
             for (int i =0;i<24;i++){
                 tiles[i] = ImageIO.read(new File("C:\\Users\\Darshil\\IdeaProjects\\java\\src\\code\\"+i+".jpg"));
             }
@@ -108,11 +97,61 @@ public class LoadImageApp extends Component {
         });
 
         f.add(new LoadImageApp());
+      //  f.setSize(new Dimension(WINDOW_WIDTH,WINDOW_HEIGHT));
         f.setIconImage(ICON);
         f.setTitle(title);
+
         f.pack();
         f.setResizable(true);
         f.setVisible(true);
+        System.out.println("hello");
 
+
+    }
+
+
+    public void repaint(int x, int y, BufferedImage tile) {
+
+        possible_move.createGraphics().drawImage(possible_move,null,x,y);
+        System.out.println("tile printed: " +x+","+y);
+
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        repaint();
+        paint(possible_move.getGraphics(),e.getX(),e.getY());
+        System.out.println("tile printed: " +e.getX()+","+e.getY());
+
+
+    }
+
+    private void paint(Graphics graphics, int x, int y) {
+        graphics.drawImage(tiles[0],x,y,null);
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent e) {
+        System.out.print("mousewheel: "+ e.getPreciseWheelRotation());
     }
 }
